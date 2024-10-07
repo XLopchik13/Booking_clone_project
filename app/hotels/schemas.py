@@ -1,24 +1,21 @@
-from typing import List, Optional
+from typing import List
 
 from pydantic import BaseModel
 
 
-class SRoom(BaseModel):
+class SHotel(BaseModel):
     id: int
-    hotel_id: int
     name: str
-    description: Optional[str]
+    location: str
     services: List[str]
-    price: int
-    quantity: int
+    rooms_quantity: int
     image_id: int
 
     class Config:
         orm_mode = True
 
 
-class SRoomInfo(SRoom):
-    total_cost: int
+class SHotelInfo(SHotel):
     rooms_left: int
 
     class Config:

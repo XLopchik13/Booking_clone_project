@@ -1,36 +1,33 @@
-from fastapi import FastAPI, Query, Depends
-from typing import Optional
-from datetime import date
-from pydantic import BaseModel
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.bookings.router import router as router_bookings
+from app.hotels.router import router as router_hotels
+from app.images.router import router as router_images
+from app.pages.router import router as router_pages
 from app.users.router import router as router_users
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="app/static"), "static")
+
 app.include_router(router_users)
 app.include_router(router_bookings)
+app.include_router(router_hotels)
 
+app.include_router(router_pages)
+app.include_router(router_images)
 
-class SHotel(BaseModel):
-    address: str
-    name: str
-    stars: int
+origins = [
+    "http://localhost:3000"
+]
 
-
-@app.get("/hotels")
-def get_hotels(
-        location: str,
-        date_from: date,
-        date_to: date,
-        has_spa: Optional[bool] = None,
-        stars: Optional[int] = Query(None, ge=1, le=5),
-) -> list[SHotel]:
-    hotels = [
-        {
-            "address": "Altai",
-            "name": "Super Hotel",
-            "stars": 5,
-        },
-    ]
-    return hotels
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
+    allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers",
+                   "Access-Control-Allow-Origin", "Authorization"],
+)
