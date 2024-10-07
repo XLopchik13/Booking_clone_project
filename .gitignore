@@ -1,0 +1,11 @@
+.env
+
+.venv/
+
+.idea/
+
+test_data_db.sql
+
+__pycache__/
+*.pyc
+*.pyo
