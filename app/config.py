@@ -1,5 +1,4 @@
 from pydantic_settings import BaseSettings
-from pydantic import model_validator
 
 
 class Settings(BaseSettings):
@@ -8,15 +7,10 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASS: str
     DB_NAME: str
-    DATABASE_URL: str = None
 
-    @model_validator(mode='before')
-    def assemble_database_url(cls, values):
-        values["DATABASE_URL"] = (
-            f"postgresql+asyncpg://{values['DB_USER']}:{values['DB_PASS']}"
-            f"@{values['DB_HOST']}:{values['DB_PORT']}/{values['DB_NAME']}"
-        )
-        return values
+    @property
+    def database_url(self):
+        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
     SECRET_KEY: str
     ALGORITHM: str
