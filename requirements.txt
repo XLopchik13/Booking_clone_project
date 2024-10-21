@@ -8,3 +8,5 @@ fastapi-cache2[redis]
 celery~=5.4.0
 redis~=4.6.0
 pillow~=11.0.0
+sqladmin~=0.20.0
+starlette~=0.38.4
