@@ -31,7 +31,7 @@ class RoomDAO(BaseDAO):
             .group_by(Bookings.room_id)
             .cte("booked_rooms")
         )
-        
+
         get_rooms = (
             select(
                 Rooms.__table__.columns,

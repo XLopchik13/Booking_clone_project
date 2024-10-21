@@ -1,13 +1,13 @@
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from redis import asyncio as aioredis
 from sqladmin import Admin
 
 from app.admin.auth import authentication_backend
-from app.admin.views import UsersAdmin, BookingsAdmin, RoomsAdmin, HotelsAdmin
+from app.admin.views import BookingsAdmin, HotelsAdmin, RoomsAdmin, UsersAdmin
 from app.bookings.router import router as router_bookings
 from app.config import settings
 from app.database import engine
@@ -43,7 +43,8 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup():
-    redis = aioredis.from_url(f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}", encoding="utf8", decode_response=True)
+    redis = aioredis.from_url(f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}",
+                              encoding="utf8", decode_response=True)
     FastAPICache.init(RedisBackend(redis), prefix="cache")
 
 

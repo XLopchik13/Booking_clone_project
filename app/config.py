@@ -14,7 +14,8 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self):
-        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+        return (f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}"
+                f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}")
 
     TEST_DB_HOST: str
     TEST_DB_PORT: int
@@ -24,7 +25,8 @@ class Settings(BaseSettings):
 
     @property
     def test_database_url(self):
-        return f"postgresql+asyncpg://{self.TEST_DB_USER}:{self.TEST_DB_PASS}@{self.TEST_DB_HOST}:{self.TEST_DB_PORT}/{self.TEST_DB_NAME}"
+        return (f"postgresql+asyncpg://{self.TEST_DB_USER}:{self.TEST_DB_PASS}"
+                f"@{self.TEST_DB_HOST}:{self.TEST_DB_PORT}/{self.TEST_DB_NAME}")
 
     SMTP_HOST: str
     SMTP_PORT: int
