@@ -1,6 +1,6 @@
 from typing import List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class SHotel(BaseModel):
@@ -11,12 +11,10 @@ class SHotel(BaseModel):
     rooms_quantity: int
     image_id: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class SHotelInfo(SHotel):
     rooms_left: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
