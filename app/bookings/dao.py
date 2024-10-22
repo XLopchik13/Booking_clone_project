@@ -8,6 +8,7 @@ from app.dao.base import BaseDAO
 from app.database import async_session_maker
 from app.exceptions import RoomFullyBooked
 from app.hotels.rooms.models import Rooms
+from app.logger import logger
 
 
 class BookingDAO(BaseDAO):
@@ -60,6 +61,8 @@ class BookingDAO(BaseDAO):
                 rooms_left = await session.execute(get_rooms_left)
                 rooms_left: int = rooms_left.scalar()
 
+                logger.debug(f"{rooms_left=}")
+
                 if rooms_left > 0:
                     get_price = select(Rooms.price).filter_by(id=room_id)
                     price = await session.execute(get_price)
@@ -78,9 +81,9 @@ class BookingDAO(BaseDAO):
 
                     new_booking = await session.execute(add_booking)
                     await session.commit()
-                    return new_booking.scalar()
+                    return new_booking.mappings().one()
                 else:
-                    return None
+                    raise RoomFullyBooked
         except RoomFullyBooked:
             raise RoomFullyBooked
         except (SQLAlchemyError, Exception) as e:
@@ -94,3 +97,4 @@ class BookingDAO(BaseDAO):
                 "date_from": date_from,
                 "date_to": date_to,
             }
+            logger.error(msg, extra=extra, exc_info=True)
